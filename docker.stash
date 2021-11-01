@@ -1,0 +1,473 @@
+# <#>Docker<> SpeedSheet
+<b>What you need, faster.<>
+
+
+# Summary
+
+
+## Documentation
+
+
+### Official Site
+<l>https://www.docker.com/<>
+
+
+### Install Docker
+<l>https://docs.docker.com/get-docker/<>
+@
+@ docs.docker.com, get-docker
+
+
+### Docker Hub
+<l>https://hub.docker.com<>
+@
+@ hub.docker.com
+
+
+### Docker Hub Images
+<l>https://hub.docker.com/search?q=&type=image<>
+@
+@ hub.docker.com
+
+
+
+## Components
+
+<*>Image
+Container<>
+
+<b>Image<>
+An executable package that includes everything needed to run an application.
+
+<b>Container<>
+A runtime instance of an image.
+
+
+
+## Docker Files
+
+
+### Docker Configuration File
+
+<cb>Dockerfile<>
+@
+@ dockerfile
+
+
+
+### Host Configuration File
+
+<cb>/var/lib/docker/containers/<v>hash_of_the_container<>/hostconfig.json<>
+@
+@ hostconfig.json, /var/lib/docker/containers
+
+
+
+# Docker Commands
+@
+@ How To
+
+
+
+### Container - Create
+
+<cb>docker create<>
+
+
+
+### Container - Delete
+
+<cb>docker rm <v>container_name<><>
+
+<table><col><c>-f		<><><col>Force delete even if running.<><>
+
+
+Deletes a container
+Will lose all data saved on the container.
+@
+@ rm, -f
+
+
+### Container - Info
+
+<cb>docker inspect <v>container_name<><>
+@
+@ inspect
+
+
+
+### Container - Port - Remap
+
+<card>Edit hostconfig.json<>
+
+Procedure:
+
+<*>Stop Container
+Edit <c>hostconfig.json<>
+Restart Container<>
+
+
+Stop:
+
+<cb>docker stop <v>container_name<><>
+
+Edit hostconfig.json:
+
+<cb>/var/lib/docker/containers/<v>hash_of_the_container<>/hostconfig.json<>
+
+Restart:
+
+<cb>docker start <v>container_name<><>
+
+
+Restarting the server will flush the cashe and map the port.
+@
+@ configuration, hostconfig.json, edit
+
+
+
+### Container - Run
+
+<cb>docker run <v>image_name<><>
+
+<cb>docker run <v>image_name<> --name <v>container_name<><>
+
+
+Will retrieve the image from a repository if not already present.
+
+
+Options:
+
+<table><col><c>-d							<><><col>Run Detached. Run in background mode. No terminal required.<>
+<col><c>-it<><><col>Run attached to the terminal.<>
+<col><c>--name <v>container_name<><><><col><>
+<col><c>-p <v>port_to<>:<v>port_from<><><><col>Map port number from port_from to port_to.<><>
+@
+@ -d, --name, -i, -t, -it, -p
+
+
+### Container - Run Detached
+
+<cb>docker run -d <v>image_name<><>
+
+Run in background mode. No terminal required.
+@
+@ -d
+
+
+
+### Container - Run And Open Terminal
+
+<cb>docker run -it <v>...<> /bin/bash<>
+@
+@ -it, bash, /bin/bash
+
+
+
+### Container - Start
+
+<cb>docker start <v>container_name<> <v>...<><>
+
+
+
+### Container - Status
+
+<cb>docker ps -a --filter "name=<v>container_name<>"<>
+
+<table><col><c>-a			<><><col>List all containers whether running or not. Wouldn't show stopped status without this.<>
+<col><c>--filter<><col>Filter out on the name.<><>
+@
+@ ps, -a, --filter
+
+
+### Container - Stop
+
+<>docker stop <v>container_name<><>
+
+
+Stops the container.
+The container data remains safe
+
+
+
+### Container - Stop All
+
+<cb>docker stop $(docker ps -aq)<>
+@
+@ $(docker ps -aq
+
+
+
+### Container - Stop and Delete
+
+<cb>docker rm -f <v>...<><>
+@
+@ rm -f
+
+
+
+### Containers - List All
+
+<cb>docker ps -a<>
+@
+@ ps -a
+
+
+
+### Containers - List Running
+
+<cb>docker ps<>
+@
+@ ps
+
+
+
+### Docker - Status
+
+<cb>docker info<>
+@
+@ information, info
+
+
+
+### Docker - Version
+
+Short Version Number:
+
+<cb>docker-compose --version<>
+
+Full Version Number:
+
+<cb>docker version<>
+@
+@ Number, docker-compose, --version
+
+
+
+### Docker Compose - Version
+
+<cb>docker-compose --version<>
+@
+@ Number, docker-compose, --version
+
+
+
+### Image - Create - From Container
+
+<cb>docker commit <v>container_name<> <v>image_name<><>
+
+<m>(Needs to be tested)<>
+@
+@ Commit To, commit
+
+
+
+### Image - Retrieve
+
+<cb>docker pull <v>image<><>
+
+Retrieve Specific Version:
+
+<cb>docker pull <v>image<>:<v>version<>.<v>subversion<><>
+
+
+Retrieves an image from a docker repository.
+@
+@ pull, version
+
+
+
+### Image - Remove
+
+<cb>docker rmi <v>image_id<><>
+
+<cb>docker rmi <v>image_name<><>
+@
+@ docker rmi, by id, by name, delete
+
+
+
+### Images - List
+
+<cb>docker images<>
+
+<cb>docker images <v>repository_name<>
+
+docker images <v>repository_name<>:<v>tag<><>
+@
+@ docker images
+
+
+
+### Server - Local Machine Name
+
+<cb>host.docker.internal<>
+
+
+Reference the local host using this.
+
+
+Example:
+
+<cb>http://host.docker.internal:8080/index.html<>
+@
+@ host, host.docker.internal
+
+
+
+# Docker Configuration File
+@
+@ dockerfile
+
+
+### Configuration File Name
+
+<cb>Dockerfile<>
+
+
+
+### Docker File - App Start
+
+<cb>ENTRYPOINT ["<v>appname<>", "<v>parameter1<>", "<v>parameter2<>", <v>...<> ]<>
+@
+@ entrypoint
+
+
+
+### Docker File - Comment
+
+<cb><#># A comment.<><>
+@
+@ \#, comments
+
+
+
+### Docker File - File Copy
+
+<cb>COPY <v>source_path<> <v>container_path<><>
+@
+@ copy
+
+
+
+### Docker File - Folder Copy
+
+<cb>COPY <v>source_dir<> <v>container_dir<><>
+@
+@ copy
+
+
+
+### Docker File - Directory Create / Link
+
+<cb>VOLUME <v>/path<><>
+
+
+Links the container to the host machine allowing access to /path.
+@
+@ volume
+
+
+
+### Docker File - Variable - Create
+
+<cb>ARG <v>VARIABLE_1<>=<v>value<><>
+@
+@ arg, =
+
+
+
+### Docker File - Variable - Use
+
+<cb>{<v>VARIABLE_1<>}<>
+@
+@ {}
+
+
+Returns the value of a variable.
+
+
+
+# Index - Images
+
+
+### MySql
+
+Image Name:
+
+<cb>mysql<>
+
+Run:
+
+<cb>docker run --name <v>container_name<>  -p <v>3306<>:<v>3306<> -e MYSQL_ROOT_PASSWORD=<v>new_password<> -d mysql<>
+
+
+Access Bash:
+
+<cb>docker exec -it <v>container_name<> bash
+mysql --password="<v>new_password<>"<>
+
+
+
+### WordPress
+
+Image Name:
+
+<cb>wordpress<>
+
+Run:
+
+<cb>docker run --name <v>container_name<> -p <v>8080<>:<v>80<> -d wordpress<>
+
+Use 8080 for local instance.
+
+
+
+# Glossary
+
+
+## Terms
+
+
+### Docker Client
+The component that allows the user to send commands to the Docker Daemon. Commands are sent using API calls.
+
+
+
+### Docker Compose
+This is a tool for defining multi-container Docker applications.
+
+
+
+### Docker Container
+A runtime instance of an image.  Data remains on the Docker host when stopped.
+
+
+
+### Docker Daemon
+The component that actually runs the docker container. It does all the heavy lifting.
+Can be on a different machine to the Docker Client.
+Implements the Docker Remote API.
+
+
+
+### Docker Engine
+A docker client and docker daemon running on a machine.
+
+
+
+### Docker File
+'Dockerfile'. This file contains the docker configuration for the container.
+
+
+
+### Docker Image
+It is an executable package that includes everything needed to run an application--the code, a runtime, libraries, environment variables, and configuration files.
+
+
+
+### Docker Swarm
+This provides clustering for Docker, by turning a group of Docker engines into a single engine.
+
+
+
