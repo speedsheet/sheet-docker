@@ -1,6 +1,6 @@
 # Docker SpeedSheet
 
-The Docker speedsheet covers the creating and running Docker containers. The speedsheet is hosted on [speedsheet.io](https://speedsheet.io). This is the raw content for that speedsheet.
+The Docker speedsheet covers the creating and running of Docker containers. The speedsheet is hosted on [speedsheet.io](https://speedsheet.io). This is the raw content for that speedsheet.
 
 Docker SpeedSheet:  
 https://speedsheet.io/s/docker
@@ -15,9 +15,12 @@ The sheet covers some basic operations but is missing essential items.
 
 # Contribute
 
-Have something you'd like to see in here, submit it!
+Have something you'd like to see in the speedsheet? Submit it!
 
-Please feel free to submit updates! These are currently uploaded manually. Expect short delays before seeing the updates online.
+Add it to the '.stash' document and submit a pull request here.
+
+Guidelines:
+https://speedsheet.io/s/speedsheet_guidelines
 
 SpeedSheet Format:  
 https://speedsheet.io/s/stash
