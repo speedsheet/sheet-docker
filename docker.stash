@@ -1,34 +1,146 @@
 # <#>Docker<> SpeedSheet
-<b>Find what you need, faster.<>
+<b>Find it faster.<>
 
 
-# Summary
+<table><col><b>Basics<>
+
+<*><l "?q=file-only">Docker Files<>
+<l "?q=config-only">Dockerfile<>
+<l "?q=dc-config-only">docker-compose.yaml<><>
+
+<b>Reference<>
+
+<*><l "?q=examples-only">Examples<>
+<l "?q=online-only">Online Resources<>
+<l "?q=how-to-only">How To<>
+<l "?q=terms-only">Terms<><><><col><b>Commands<>
+
+<*><l "?q=docker-only">Docker<>
+<l "?q=compose-only">Docker-Compose<>
+<l "?q=container-only">Container<>
+<l "?q=image-only">Image<>
+<l "?q=network-only">Network<>
+<l "?q=registry-only">Registry / Hub<><><><>
 
 
-## Documentation
+# Command Summary
 
+<table><col>Image - Build				<><col><c>docker build -t <v>image_name<> <v>source_directory<><><>
+<col><><col><in-2><c>-f <v>docker_file<><><><>
+<col> <>
+<col>Image - Get<><col><c>docker retrieve <v>image_name<><><>
+<col>Image - Remove<><col><c>docker rmi <v>image_name<><><>
+<col>Image - Inspect<><col><c>docker inspect <v>image_name<><><>
+<col>Image - List All<><col><c>docker images<><>
+<col>Container - Create<><col><c>docker create <v>image_name<><><>
+<col>Container - Create and Run<><col><c>docker run <v>image_name<><><>
+<col><><col><in-2><c>-d<><><>
+<col><><col><in-2><c>--name <v>container_name<><><><>
+<col><><col><in-2><c>--net <v>network_name<><><><>
+<col><><col><in-2><c>-p <v>external_port<>:<v>internal_port<><><><>
+<col><><col><in-2><c>-v <v>external_path<>:<v>internal_path<><><><>
+<col> <>
+<col>Container - Remove<><col><c>docker rm <v>name<>|<v>id<><><>
+<col>Container - Start<><col><c>docker start <v>name<>|<v>id<><><>
+<col>Container - Stop<><col><c>docker stop <v>name<>|<v>id<><><>
+<col> <>
+<col>Container - Logs<><col><c>docker logs <v>name<>|<v>id<><><>
+<col>Container - Start Shell<><col><c>docker exec -it <v>name<>|<v>id<> /bin/bash<><>
+<col>Container - Show Running<><col><c>docker ps<><>
+<col>Container - Show All<><col><c>docker ps -a<><>
+<col> <>
+<col>Docker Compose - Build<><col>docker-compose build<>
+<col><><col><in-2><c>-f <v>docker_compose_file<><><><>
+<col> <>
+<col>Docker Compose - Create and Start<><col><c>docker-compose up<><>
+<col>Docker Compose - Remove<><col><c>docker-compose rm<><>
+<col>Docker Compose - Start<><col><c>docker-compose start<><>
+<col>Docker Compose - Stop<><col><c>docker-compose stop<><>
+<col>Docker Compose - Stop and Remove<><col><c>docker-compose down<><><>
+
+
+
+
+# Online References
+@
+@ online-only
 
 ### Official Site
 <l>https://www.docker.com/<>
 
+### Official Docs
+<l>https://docs.docker.com/<>
 
 ### Install Docker
 <l>https://docs.docker.com/get-docker/<>
 @
 @ docs.docker.com, get-docker
 
-
 ### Docker Hub
 <l>https://hub.docker.com<>
 @
 @ hub.docker.com
-
 
 ### Docker Hub Images
 <l>https://hub.docker.com/search?q=&type=image<>
 @
 @ hub.docker.com
 
+### Docs - Docker File Reference
+<l>https://docs.docker.com/engine/reference/builder/<>
+@
+@ dockerfile
+
+### Docs - Docker Volume Reference
+<l>https://docs.docker.com/storage/volumes/<>
+
+
+
+# Examples
+@
+@ example-only, examples-only, samples-only
+
+
+### Sample Node App
+
+dockerfile:
+
+<cb><#># Sample Dockerfile for a Node app.<>
+
+FROM    node:alpine
+LABEL   author="<v>your_name_here<>"
+ENV     NODE_ENV=production
+ENV     PORT=3000
+
+WORKDIR /var/www
+
+COPY    package.json package-lock.json ./
+RUN     npm install
+
+COPY    . ./
+
+EXPOSE	$PORT
+
+ENTRYPOINT ["npm", "start"]<>
+
+
+.dockerignore:
+
+<cb>.git
+node_modules/<>
+
+
+Create Image:
+
+<cb>docker build -t <v>sample-node-image<> .<>
+
+Create and Start Container:
+
+<cb>docker run -p 3000:3000 --name "<v>sample-node-app<>" -d <v>sample-node-image<><>
+
+
+
+# Summary
 
 
 ## Components
@@ -45,33 +157,247 @@ A runtime instance of an image.
 
 
 ## Docker Files
+@
+@ files-only
 
 
 ### Docker Configuration File
 
 <cb>Dockerfile<>
+
+
+The default name for the docker configuration file.
+
+You can define something more specific like:
+
+<cb>node.dockerfile<>
 @
-@ dockerfile
+@ dockerfile, name, settings
+
+
+
+### Docker Compose Configuration File
+
+<cb>docker-compose.yml<>
+
+
+A YAML file that configures Docker Compose services.
+@
+@ name, docker-compose.yml, docker-compose.yaml
+
+
+
+### Docker Ignore File
+
+<cb>.dockerignore<>
+
+Contents:
+
+<cb><v>directory<>
+<v>direcory_files/<>
+<v>file<>
+
+*.txt<>
+
+
+Any file in the ignore file will be ignored by any docker COPY commands.
+@
+@ ignore files, ignore directories, path, copy
+@ exclude
+@ .dockerignore, .ignore
 
 
 
 ### Host Configuration File
 
-<cb>/var/lib/docker/containers/<v>hash_of_the_container<>/hostconfig.json<>
+Container:
+
+<cb>/var/lib/docker/containers/<v>container_id<>/hostconfig.json<>
+
+
+This file contains host and port configuration information for the container.
 @
-@ hostconfig.json, /var/lib/docker/containers
+@ hostconfig.json, /var/lib/docker/containers/, var, lib, containers
+
+
+### Log File
+
+Container:
+
+<cb>/var/lib/docker/containers/<v>container_id<>/<v>container_id<>-json.log<>
+@
+@ json.log, /var/lib/docker/containers/, var, lib, containers, find, get, logs, files
 
 
 
 # Docker Commands
 @
-@ How To
+@ commands-only, cli, cli-only
 
+
+## Docker
+@
+@ docker-only
+
+
+### Docker - Status
+
+<cb>docker info<>
+
+Shows all stats for the docker server.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/info/>docker info<>
+@
+@ information, info
+
+
+
+### Docker - Version
+
+<cb>docker version<>
+
+Shows the docker version.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/version/>docker version<>
+@
+@ Number, --version
+
+
+
+## Docker Container
+@
+@ container-only
 
 
 ### Container - Create
 
-<cb>docker create<>
+<cb>docker create <v>image_name<><>
+
+<cb>docker create --name <v>container_name<> <v>image_name<><>
+
+Creates a Docker container from an image.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/create/>docker create<>
+@
+@ new
+
+
+
+### Container - Create and Run
+
+<cb>docker run <v>image_name<><>
+
+<cb>docker run <v>image_name<> --name <v>container_name<><>
+
+
+Will retrieve the image from a repository if not already present.
+
+
+Options:
+
+<in-2><table><col><c>-d							<><><col>Run Detached. Run in background mode. No terminal required.<>
+<col><c>-it<><><col>Run attached to the terminal.<>
+<col><c>--name <v>container_name<><><>
+<col><c>--net <v>network_name<><><><col>Connect to a Bridge Network<>
+<col><c>-p <v>port_to<>:<v>port_from<><><><col>Map port number from port_from to port_to.<>
+<col><c>-v <v>external_path<>:<v>container_path<><><><col>Map a container path to an external directory or file<><><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -d, --name, -i, -t, -it, -p
+
+
+
+### Container - Create and Run - Run Detached
+
+<cb>docker run -d <v>image_name<><>
+
+Run in background mode. No terminal required.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -d, in background, start, &
+
+
+
+### Container - Create and Run - Expose Port
+
+<cb>docker run -p <v>external_port<>:<v>internal_port<> <v>image_name<><>
+
+
+Defines the port or ports that the container uses when running.
+
+
+<c>-p | --publish<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -p, --publish, --port, ports, start, exposing, opening, enable
+
+
+
+### Container - Create and Run - Mount Volume
+
+<cb>docker run -v <v>container_directory<> <v>...<><>
+
+
+Mounts the container directory on the local file system.
+
+<c>-v | --volume<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -v, -volume, path, folder, directory, file
+
+
+
+### Container - Create and Run - Mount Volume, Specify Target
+
+<cb>docker run -v <v>host_directory<>:<v>container_directory<> <v>...<><>
+
+
+Mounts the container directory to the directory on the local file system.
+
+<c>-v | --volume<>
+
+
+Example Mac / Linux:
+
+<cb>docker run -p 8080:80 -v "$(pwd)":/usr/share/nginx/html nginx:alpine<>
+
+Example Windows - Command Line:
+
+<cb>docker run -p 8080:80 -v %cd%:/usr/share/nginx/html nginx:alpine<>
+
+Example Windows - Power Shell:
+
+<cb>docker run -p 8080:80 -v ${PWD}:/usr/share/nginx/html nginx:alpine<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -v, -volume, path, folder, directory, file
+
+
+
+### Container - Create and Run - Open Terminal
+
+<cb>docker run -it <v>container_id<> /bin/bash<>
+
+
+-it = Interactive TTY
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
+@
+@ -it, bash, /bin/bash, cli, log in, start, and connect, shell into
 
 
 
@@ -84,15 +410,52 @@ A runtime instance of an image.
 
 Deletes a container
 Will lose all data saved on the container.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/rm/>docker rm<>
 @
-@ rm, -f
+@ rm, -f, remove, delete
 
 
-### Container - Info
+
+### Container - File - Copy From Container
+
+<cb>docker cp container:<v>file_path<> <v>target_path<><>
+
+
+Copies a file from the container to the local file system.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/cp/>docker cp<>
+@
+@ from-container, to-local, container:, cp
+
+
+
+### Container - File - Copy To Container
+
+<cb>docker cp <v>file_path<> container:<v>target_path<><>
+
+Copies a file from the local file system to the container.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/cp/>docker cp<>
+@
+@ to-container, from-local, container:, cp
+
+
+
+### Container - Inspect
 
 <cb>docker inspect <v>container_name<><>
+
+
+Shows the detailed properties of the container.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/inspect/>docker inspect<>
 @
-@ inspect
+@ inspect, information, print, show, see
 
 
 
@@ -113,7 +476,7 @@ Stop:
 
 Edit hostconfig.json:
 
-<cb>/var/lib/docker/containers/<v>hash_of_the_container<>/hostconfig.json<>
+<cb>/var/lib/docker/containers/<v>container_hash<>/hostconfig.json<>
 
 Restart:
 
@@ -126,47 +489,16 @@ Restarting the server will flush the cashe and map the port.
 
 
 
-### Container - Run
-
-<cb>docker run <v>image_name<><>
-
-<cb>docker run <v>image_name<> --name <v>container_name<><>
-
-
-Will retrieve the image from a repository if not already present.
-
-
-Options:
-
-<table><col><c>-d							<><><col>Run Detached. Run in background mode. No terminal required.<>
-<col><c>-it<><><col>Run attached to the terminal.<>
-<col><c>--name <v>container_name<><><><col><>
-<col><c>-p <v>port_to<>:<v>port_from<><><><col>Map port number from port_from to port_to.<><>
-@
-@ -d, --name, -i, -t, -it, -p
-
-
-### Container - Run Detached
-
-<cb>docker run -d <v>image_name<><>
-
-Run in background mode. No terminal required.
-@
-@ -d
-
-
-
-### Container - Run And Open Terminal
-
-<cb>docker run -it <v>...<> /bin/bash<>
-@
-@ -it, bash, /bin/bash
-
-
-
 ### Container - Start
 
 <cb>docker start <v>container_name<> <v>...<><>
+
+Starts an existing container.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/start/>docker start<>
+@
+@ run
 
 
 
@@ -174,10 +506,16 @@ Run in background mode. No terminal required.
 
 <cb>docker ps -a --filter "name=<v>container_name<>"<>
 
-<table><col><c>-a			<><><col>List all containers whether running or not. Wouldn't show stopped status without this.<>
-<col><c>--filter<><col>Filter out on the name.<><>
+<table><col><c>-a		<><><col>List all containers whether running or not.
+Wouldn't show stopped status without this.<>
+<col> <>
+<col><c>--filter<><><col>Filter out on the name.<><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/ps/>docker ps<>
 @
-@ ps, -a, --filter
+@ ps, -a, --filter, get ids, container_id
+
 
 
 ### Container - Stop
@@ -189,10 +527,16 @@ Stops the container.
 The container data remains safe
 
 
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/stop/>docker stop<>
+
+
 
 ### Container - Stop All
 
 <cb>docker stop $(docker ps -aq)<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/stop/>docker stop<>
 @
 @ $(docker ps -aq
 
@@ -201,54 +545,242 @@ The container data remains safe
 ### Container - Stop and Delete
 
 <cb>docker rm -f <v>...<><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/rm/>docker rm<>
 @
-@ rm -f
+@ rm -f, remove, delete
+
+
+
+### Container - View Logs
+
+<cb>docker logs <v>container_name<><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/logs/>docker logs<>
 
 
 
 ### Containers - List All
 
 <cb>docker ps -a<>
+
+<cb>docker container ls -a<>
+
+Lists all docker containers
+
+
+<c>-a | --all<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/ps/>docker ps<>
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/container_ls/>docker container ls<>
 @
-@ ps -a
+@ ps -a, ls
 
 
 
 ### Containers - List Running
 
 <cb>docker ps<>
+
+<cb>docker container ls<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/ps/>docker ps<>
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/container_ls/>docker container ls<>
 @
-@ ps
+@ ps, ls
 
 
 
-### Docker - Status
-
-<cb>docker info<>
+## Docker Compose
 @
-@ information, info
+@ compose-only, comp-only, docker-compose, docker-compose-only
+
+
+### Docker Compose - Build
+
+<cb>docker-compose build<>
+
+
+Builds all the containers needed for the services.
+
+The services are built from docker-compose.yml.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_build/>docker-compose build<>
 
 
 
-### Docker - Version
+### Docker Compose - Build - Custom Build File
 
-Short Version Number:
+<cb>docker-compose build -f <v>docker_compose_file<><>
 
-<cb>docker-compose --version<>
 
-Full Version Number:
+Builds all the containers needed for the services.
 
-<cb>docker version<>
+The services are built from docker-compose.yml.
+
+
+<c>-f<> | <c>--file<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_build/>docker-compose build<>
 @
-@ Number, docker-compose, --version
+@ -f, --file, with
+
+
+### Docker Compose - Create and Start
+
+<cb>docker-compose up<>
+
+
+Creates and runs the Docker Compose services.
+
+The services are built from docker-compose.yml.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_up/>docker-compose up<>
+@
+@ up, run
+
+
+### Docker Compose - Create and Start - Detached
+
+<cb>docker-compose up -d<>
+
+
+Creates and runs the Docker Compose services.
+
+The services run in the background
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_up/>docker-compose up<>
+@
+@ up, background, -d, &, run
+
+
+
+### Docker Compose - Delete
+
+<cb>docker-compose rm<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_rm/>docker-compose rm<>
+@
+@ rm, remove, delete
+
+
+
+### Docker Compose - Start
+
+<cb>docker-compose start<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_start/>docker-compose start<>
+@
+@ run
+
+
+
+### Docker Compose - Stop
+
+<cb>docker-compose down<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_stop/>docker-compose stop<>
+
+
+
+### Docker Compose - Stop and Delete
+
+<cb>docker-compose down<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_down/>docker-compose down<>
+@
+@ down, remove, delete
 
 
 
 ### Docker Compose - Version
 
 <cb>docker-compose --version<>
+
+
+Shows the docker-compose version.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/compose_version/>docker-compose version<>
 @
 @ Number, docker-compose, --version
+
+
+
+## Docker Image
+@
+@ image-only
+
+
+### Image - Build
+
+<cb>docker build -t <v>image_name<> <v>project_directory<>
+
+docker build -t <v>image_name<> .<>
+
+
+Creates a Docker image using the configuration in the docker file.
+
+
+Requires file <c>Dockerfile<>.
+
+
+<c>-t | --tag<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/build/>docker build<>
+@
+@ build -t, --tag, create
+
+
+
+### Image - Build - Custom Build File
+
+<cb>docker build -f <v>custom_docker_file<> <v>...<>
+
+docker build -f <v>custom_docker_file<> -t <v>image_name<> <v>project_directory<><>
+
+
+Creates a Docker image using the configuration in the docker file.
+
+
+Requires file <c>Dockerfile<>
+
+
+<c>-f | --file<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/build/>docker build<>
+@
+@ build -f, --file, create with
+
+
+
+### Image - Build - Registry, Tag
+
+<cb>docker build -t <v>registry<>/<v>image_name<>:<v>tag<> <v>...<><>
+
+
+Creates a docker image and with the registry and tag (version) information.
+
+<c>-t | --tag<>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/build/>docker build<>
+@
+@ build -t, create, with
 
 
 
@@ -256,13 +788,46 @@ Full Version Number:
 
 <cb>docker commit <v>container_name<> <v>image_name<><>
 
-<m>(Needs to be tested)<>
+
+Creates an image from a container.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/commit/>docker commit<>
 @
-@ Commit To, commit
+@ Commit To, commit, create
 
 
 
-### Image - Retrieve
+### Image - Delete
+
+<cb>docker rmi <v>image_id<><>
+
+<cb>docker rmi <v>image_name<><>
+
+
+Deletes an image from Docker.
+
+rmi = Remove Image
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/rmi/>docker rmi<>
+@
+@ docker rmi, by id, by name, remove, delete
+
+
+
+### Image - Push to Registry
+
+<cb>docker push <v>user_name<>/<v>image_name<>:<v>tag<><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/push/>docker push<>
+@
+@ docker, docker hub, upload
+
+
+
+### Image - Retrieve from Registry
 
 <cb>docker pull <v>image<><>
 
@@ -272,18 +837,70 @@ Retrieve Specific Version:
 
 
 Retrieves an image from a docker repository.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/pull/>docker pull<>
 @
-@ pull, version
+@ pull, version, from docker hub, get, download, from repository, download
 
 
 
-### Image - Remove
+### Image - Run
 
-<cb>docker rmi <v>image_id<><>
+<cb>docker run <v>image_name<><>
 
-<cb>docker rmi <v>image_name<><>
+<cb>docker run --name <v>container_name<> <v>image_name<><>
+
+
+Creates and runs a container from the image.
+
+Will retrieve the image from a repository if not already present.
+
+
+Options:
+
+<in-2><table><col><c>-d							<><><col>Run Detached. Run in background mode. No terminal required.<>
+<col><c>-it<><><col>Run attached to the terminal.<>
+<col><c>--name <v>container_name<><><>
+<col><c>--net <v>network_name<><><><col>Connect to a Bridge Network<>
+<col><c>-p <v>port_to<>:<v>port_from<><><><col>Map port number from port_from to port_to.<>
+<col><c>-v <v>external_path<>:<v>container_path<><><><col>Map a container path to an external directory or file<><><>
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/run/>docker run<>
 @
-@ docker rmi, by id, by name, delete
+@ -d, --name, -i, -t, -it, -p
+
+
+
+### Image - View / Inspect
+
+<cb>docker inspect <v>image_name<><>
+
+
+Shows the detailed properties of the image.
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/inspect/>docker inspect<>
+@
+@ inspect, information, print, show, see
+
+
+
+### Image - View Bill of Materials
+
+<cb>docker sbom <v>image_name<><>
+
+Shows the components inside an image.
+
+SBOM: Software Bill of Materials
+
+
+Note: As of 2022, this is experimental.
+
+
+Docker Docs: <l https://docs.docker.com/engine/sbom/>docker sbom<>
+@
+@ show contents inside, print, inspect, sbom
 
 
 
@@ -294,12 +911,551 @@ Retrieves an image from a docker repository.
 <cb>docker images <v>repository_name<>
 
 docker images <v>repository_name<>:<v>tag<><>
+
+
+Shows all the Docker images.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/images/>docker images<>
 @
 @ docker images
 
 
 
-### Server - Local Machine Name
+## Docker Network
+@
+@ network-only
+
+
+### Docker Nework - Create Bridge
+
+<cb>docker network create --driver bridge <v>bridge_name<><>
+
+
+Creates a network bridge that local Docker containers can use to communicate to each other.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/network_create/>docker network create<>
+@
+@ new, define, --driver, driver, bridge
+
+
+
+### Docker Networks - Inspect
+
+<cb>docker network inspect <v>network_name<><>
+
+
+Shows the network details.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/network_inspect/>docker network inspect<>
+@
+@ ls, print, show
+
+
+
+### Docker Networks - List All
+
+<cb>docker network ls<>
+
+
+Lists all created networks.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/network_ls/>docker network ls<>
+@
+@ ls, print, show
+
+
+
+## Docker Registry / Docker Hub
+@
+@ hub-only, registry-only, reg-only
+
+
+### Docker Registry - Login
+
+<cb>docker login<>
+
+
+Logs Docker into the repository.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/login/>docker login<>
+
+
+
+### Docker Registry - Logout
+
+<cb>docker logout<>
+
+
+Logs out Docker from the repository.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/logout/>docker logout<>
+
+
+
+### Docker Registry - Pull Image
+
+<cb>docker pull <v>image_name<>
+
+docker pull <v>image_name<>:<v>tag<><>
+
+
+Downloads an image from the registry.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/pull/>docker pull<>
+@
+@ download, retrieve, get
+
+
+
+### Docker Registry - Push Image
+
+<cb>docker push <v>image_name<>
+
+docker push <v>image_name<>:<v>tag<><>
+
+
+Uploads an image to the registry.
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/push/>docker push<>
+@
+@ download, retrieve, get
+
+
+
+# Docker Configuration File
+
+Docker Docs: <l https://docs.docker.com/engine/reference/builder/>Dockerfile reference<>
+@
+@ dockerfile, configure, settings
+@ config-only, configuration-only
+
+
+### Configuration - Default File
+
+<cb>Dockerfile<>
+@
+@ name
+
+
+
+### Docker File - App Start
+
+<cb>ENTRYPOINT ["<v>appname<>", "<v>parameter1<>", "<v>parameter2<>", <v>...<> ]<>
+
+
+Starts the application inside the container.
+
+Defines the command and parameters that will start the application in the Docker container.
+
+
+Example:
+
+<cb>ENTRYPOINT ["node", "server.js"]<>
+@
+@ entrypoint, command, parameters, run, execute
+
+
+
+### Docker File - Base Image - Define
+
+<cb>FROM <v>image-name<>
+
+FROM <v>image-name<>:<v>tag<>
+
+FROM <v>image-name<>@<v>digest<>
+
+FROM --platform=<v>platform-name<> <v>image-name<><>
+
+
+Defines the base image to use for the new image.
+
+
+Lookup From codes here:
+
+<l>https://hub.docker.com<>
+
+
+
+Example:
+
+<cb>FROM	node:alpine<>
+@
+@ from, --platform
+
+
+
+### Docker File - Comment
+
+<cb><#># A comment.<><>
+@
+@ \#, comments
+
+
+
+### Docker File - Copy File
+
+<cb>COPY <v>source_path<> container:<v>container_path<><>
+
+<cb>COPY container:<v>path<> <v>target_path<><>
+@
+@ copy, to, from, container, file system, host
+
+
+
+### Docker File - Copy File - Multiple Files
+
+<cb>COPY <v>file_1<> <v>file_2<> <v>file_3<> container:<v>directory<>/<>
+@
+@ copy, to, from, container, file system, host
+
+
+
+### Docker File - Copy Folder
+
+<cb>COPY <v>source_directory<> container:<v>directory<><>
+
+<cb>COPY container:<v>directory<> <v>target_path<><>
+@
+@ copy, to, from, container, file system, host, folder
+
+
+
+### Docker File - Environment Variable - Define
+
+<cb>ENV <V>VARIABLE_NAME<>=<v>value<><>
+
+
+Defines an environment variable.
+@
+@ env, create, new, instantiate
+
+
+
+### Docker File - Environment Variable - Use
+
+<cb><v>...<> $<V>VARIABLE_NAME<> <v>...<><>
+
+
+Defines an environment variable.
+@
+@ env, $
+
+
+
+### Docker File - Expose Port
+
+<cb>EXPOSE <v>port-number<><>
+
+
+Example:
+
+<cb>EXPOSE 3000<>
+
+
+This is the port that the docker container listens on for traffic to the application.
+
+
+
+### Docker File - Link Directory
+
+<cb>VOLUME <v>/path<><>
+
+
+Links the container to the host allowing the container to access /path.
+@
+@ volume, create, define
+
+
+
+### Docker File - Metadata
+
+<cb>LABEL <v>field_name<>="<v>value<>"<>
+
+
+Defines metadata for the image.
+@
+@ label
+
+
+
+### Docker File - Metadata - Author
+
+<cb>LABEL author="<v>name<>"<>
+@
+@ label, author=""
+
+
+
+### Docker File - Run a Command
+
+<cb>RUN <v>command<><>
+
+
+Runs a command inside the container.
+
+
+Example:
+
+<cb>RUN npm install<>
+@
+@ setup
+
+
+
+### Docker File - Variable - Define
+
+<cb>ARG <v>VARIABLE_1<>=<v>value<><>
+@
+@ arg, =
+@ create, new, instantiate
+
+
+
+### Docker File - Variable - Use
+
+<cb>{<v>VARIABLE_1<>}<>
+@
+@ {}
+
+
+Returns the value of a variable.
+
+
+
+### Docker File - Working Directory
+
+<cb>WORKDIR <V>path<><>
+
+
+Defines the directory in the container to start the app from.
+
+The path must be a path in the image.
+
+
+Example:
+
+<cb>WORKDIR /var/www<>
+@
+@ workdir, cwd, pwd, starting
+@ container, directory, cwd, pwd, folder
+
+
+
+# Docker Compose Configuration
+@
+@ docker-compose, docker-compose-config-only ,compose-config-only, dc-conf-only, dc-config-only
+@ settings, configure
+
+
+
+### Docker Compose - Configuration File
+
+<cb>docker-compose.yml<>
+
+
+A YAML file that configures Docker Compose services.
+@
+@ name, docker-compose.yml, docker-compose.yaml
+
+
+
+### Docker Compose - File Format
+
+<cb>version: '<v>1<>.<v>2<>'
+
+services:
+  <v>...<>
+
+networks:
+  <v>...<><>
+
+
+
+### Docker Compose Config - Version
+
+<cb>version: '<v>1<>.<v>5<>'<>
+@
+@ version:
+
+
+
+## Docker Compose Config - Networks
+@
+@ networks:
+
+
+### Compose Network - Root
+
+<cb>networks:<>
+@
+@ networks:, define connection
+
+
+### Compose Network - Define
+
+<cb>networks:
+  <v>network_name<>:
+    <v>...<><>
+@
+@ driver:, bridge, name, define connection
+
+
+### Compose Network - Define Bridge
+
+<cb>networks:
+  <v>network_name<>:
+    driver: bridge<>
+@
+@ driver:, bridge, name, define connection
+
+
+
+## Docker Compose Configure - Services
+@
+@ services:
+
+
+### Service - Root
+
+<cb>services:<>
+
+
+
+### Service - Define
+
+<cb>services:
+  <v>service_name<>:
+    <v>...<><>
+
+
+
+### Service - Define Build
+
+<cb>services:
+  <v>service_name<>:
+    build:
+      context: <v>path<><>
+
+
+Using Current Directory:
+
+<cb>services:
+  <v>service_name<>:
+    build:
+      context: .<>
+@
+@ build:, context:
+
+
+
+### Service - Define Build Commands
+
+<cb>services:
+  <v>service_name<>:
+    build:
+       args:
+         <>
+@
+@ build:, context:
+
+
+
+### Service - Define Build Dockerfile
+
+<cb>services:
+  <v>service_name<>:
+    build:
+       dockerfile: <v>file_name<><>
+
+
+Builds from a custom dockerfile.
+@
+@ build:, dockerfile, custom, override
+
+
+
+### Service - Define Container Name
+
+<cb>services:
+  <v>service_name<>:
+    container_name: <v>container_name<><>
+@
+@ service:, container_name:
+
+
+
+### Service - Define Dependency
+
+<cb>services:
+  <v>service_2<>:
+    depends_on:
+      - <v>service_1<><>
+
+
+Ensures the required service starts first.
+
+Note:
+This does not guarantee that the required service will be ready. 
+The dependant service may need to check the dependency is up and running.
+@
+@ service:, depends_on:, depends on
+
+
+
+### Service - Define Environment Variables
+
+<cb>services:
+  <v>service_name<>:
+    environment:
+      - <v>name<>:<v>value<>
+      - <v>name<>:<v>value<><>
+@
+@ service:, environment:
+
+
+
+### Service - Define Image
+
+<cb>services:
+  <v>service_2<>:
+    image: <v>image_name<><>
+@
+@ service:, image:
+
+
+
+### Service - Define Network
+
+<cb>services:
+  <v>service_name<>:
+    networks:
+      - <v>network_name<><>
+@
+@ service:, networks:
+
+
+
+### Service - Define Ports
+
+<cb>services:
+  <v>service_name<>:
+    ports:
+      - <v>external<>:<v>internal<><>
+@
+@ service:, ports:
+
+
+
+
+# Server - Local Machine Name
 
 <cb>host.docker.internal<>
 
@@ -315,76 +1471,37 @@ Example:
 
 
 
-# Docker Configuration File
+# How To
 @
-@ dockerfile
-
-
-### Configuration File Name
-
-<cb>Dockerfile<>
+@ how-to-only, howto-only
 
 
 
-### Docker File - App Start
+### Container - Connect To
 
-<cb>ENTRYPOINT ["<v>appname<>", "<v>parameter1<>", "<v>parameter2<>", <v>...<> ]<>
+<card>Host Name = <v>container_name<><>
+
+Use the containers name as the host name when connecting over a bridge network.
 @
-@ entrypoint
+@ host, api, ip address, bridge, network
 
 
 
-### Docker File - Comment
+### Container - Open Terminal
 
-<cb><#># A comment.<><>
+<cb>docker exec -it <v>container_id<> /bin/bash<>
+
+<cb>docker exec -it <v>container_id<> sh<>
+
+
+Opens a terminal on a running container.
+
+-it = Interactive TTY
+
+
+Docker Docs: <l https://docs.docker.com/engine/reference/commandline/exec/>docker exec<>
 @
-@ \#, comments
-
-
-
-### Docker File - File Copy
-
-<cb>COPY <v>source_path<> <v>container_path<><>
-@
-@ copy
-
-
-
-### Docker File - Folder Copy
-
-<cb>COPY <v>source_dir<> <v>container_dir<><>
-@
-@ copy
-
-
-
-### Docker File - Directory Create / Link
-
-<cb>VOLUME <v>/path<><>
-
-
-Links the container to the host machine allowing access to /path.
-@
-@ volume
-
-
-
-### Docker File - Variable - Create
-
-<cb>ARG <v>VARIABLE_1<>=<v>value<><>
-@
-@ arg, =
-
-
-
-### Docker File - Variable - Use
-
-<cb>{<v>VARIABLE_1<>}<>
-@
-@ {}
-
-
-Returns the value of a variable.
+@ -it, exec, bash, /bin/bash, cli, log in, start shell, run, connect through, over, shell into
 
 
 
@@ -423,10 +1540,27 @@ Use 8080 for local instance.
 
 
 
-# Glossary
+# Acronyms
 
 
-## Terms
+## CR
+Container Registry
+
+
+
+### SBOM
+Software Bill of Materials
+
+
+
+# Terms
+@
+@ terms-only, glossary, glossary-only
+
+
+### Alpine Linux
+A lightweight, security-focused Linux distro used by Docker images.
+
 
 
 ### Docker Client
@@ -451,23 +1585,64 @@ Implements the Docker Remote API.
 
 
 
+### Docker Desktop
+Runs Docker on Macs or Windows
+
+
+
 ### Docker Engine
-A docker client and docker daemon running on a machine.
+A Docker client and docker daemon running on a machine.
 
 
 
 ### Docker File
-'Dockerfile'. This file contains the docker configuration for the container.
+The file that contains the docker commands to create an image.
+
+It is a script that contains all the commands a user could call on the command line to create the image.
+
+Default file: <c>Dockerfile<>
+
+
+
+### Docker Host
+The host system running the docker container.
 
 
 
 ### Docker Image
 It is an executable package that includes everything needed to run an application--the code, a runtime, libraries, environment variables, and configuration files.
 
+The package is a read-only template.
+Used to create the container that is actually run.
+
+
+
+### Docker Registry
+A place that stores Docker images.
+
+It can be local, on Docker Hub or on a cloud service registry (AWS ECR, Azure Container Registry)
 
 
 ### Docker Swarm
 This provides clustering for Docker, by turning a group of Docker engines into a single engine.
 
+
+### Network Host Name
+The network host name is the same as the container name.
+For Docker Compose, the name is the same as the service name.
+@
+@ connection
+
+
+
+### Services
+These are the containers that are managed by Docker Compose.
+
+<card>service = container<>
+
+
+
+### Tag
+Typically this is the version number of an image build.
 
 
