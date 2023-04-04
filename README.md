@@ -8,9 +8,9 @@ https://speedsheet.io/s/docker
 
 # Status
 
-Content: Bare Bones
+Content: Good Coverage
 
-The sheet covers some basic operations but is missing essential items.
+It covers all the basics.
 
 
 # Contribute
